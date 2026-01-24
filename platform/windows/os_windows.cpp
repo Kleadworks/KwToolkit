@@ -1120,6 +1120,7 @@ LRESULT OS_Windows::WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam) 
 			// FIXME: Do something?
 		} break;
 
+#ifdef _WIN32_WINNT >= 0x0601 // Windows 7+
 		case WM_TOUCH: {
 			BOOL bHandled = FALSE;
 			UINT cInputs = LOWORD(wParam);
@@ -1154,6 +1155,7 @@ LRESULT OS_Windows::WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam) 
 			};
 
 		} break;
+#endif
 
 		case WM_DEVICECHANGE: {
 			joypad->probe_joypads();
@@ -1677,7 +1679,9 @@ Error OS_Windows::initialize(const VideoMode &p_desired, int p_video_driver, int
 	tme.dwHoverTime = HOVER_DEFAULT;
 	TrackMouseEvent(&tme);
 
+#ifdef _WIN32_WINNT >= 0x0601 // Windows 7+
 	RegisterTouchWindow(hWnd, 0);
+#endif
 
 	DragAcceptFiles(hWnd, true);
 
