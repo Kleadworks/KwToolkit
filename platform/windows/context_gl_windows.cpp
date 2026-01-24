@@ -91,12 +91,12 @@ bool ContextGL_Windows::should_vsync_via_compositor() {
 		return false;
 	}
 
+	// TODO: Dynamically acquire DWM api
+#if _WIN32_WINNT >= 0x0600 // Windows Vista+
 	// Note: All Windows versions supported by Godot have a compositor.
 	// It can be disabled on earlier Windows versions.
 	BOOL dwm_enabled;
 
-	// TODO: Dynamically acquire DWM api
-#if _WIN32_WINNT >= 0x0600 // Windows Vista+
 	if (SUCCEEDED(DwmIsCompositionEnabled(&dwm_enabled))) {
 		return dwm_enabled;
 	}

@@ -2411,6 +2411,7 @@ bool OS_Windows::get_window_per_pixel_transparency_enabled() const {
 void OS_Windows::set_window_per_pixel_transparency_enabled(bool p_enabled) {
 	if (!is_layered_allowed())
 		return;
+#if _WIN32_WINNT >= 0x0600 // Windows Vista+
 	if (layered_window != p_enabled) {
 		if (p_enabled) {
 			//enable per-pixel alpha
@@ -2435,6 +2436,7 @@ void OS_Windows::set_window_per_pixel_transparency_enabled(bool p_enabled) {
 			DwmEnableBlurBehindWindow(hWnd, &bb);
 		}
 	}
+#endif
 }
 
 void OS_Windows::set_borderless_window(bool p_borderless) {
