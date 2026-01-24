@@ -357,7 +357,9 @@ void Tabs::_notification(int p_what) {
 					w += get_constant("hseparation");
 
 					Rect2 cb_rect;
-					cb_rect.size = style->get_minimum_size() + cb->get_size();
+					//cb_rect.size = style->get_minimum_size() + cb->get_size();
+					cb_rect.size.x = cb->get_size().x;
+					cb_rect.size.y = style->get_minimum_size().y + cb->get_size().y;
 					cb_rect.position.x = w;
 					cb_rect.position.y = sb->get_margin(MARGIN_TOP) + ((sb_rect.size.y - sb_ms.y) - (cb_rect.size.y)) / 2;
 
@@ -369,7 +371,7 @@ void Tabs::_notification(int p_what) {
 						}
 					}
 
-					cb->draw(ci, Point2i(w + style->get_margin(MARGIN_LEFT), cb_rect.position.y + style->get_margin(MARGIN_TOP)));
+					cb->draw(ci, Point2i(w, cb_rect.position.y + style->get_margin(MARGIN_TOP)));
 					w += cb->get_width();
 					tabs.write[i].cb_rect = cb_rect;
 				}
