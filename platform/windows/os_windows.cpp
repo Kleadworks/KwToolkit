@@ -1120,40 +1120,40 @@ LRESULT OS_Windows::WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam) 
 			// FIXME: Do something?
 		} break;
 
-		// case WM_TOUCH: {
-			// BOOL bHandled = FALSE;
-			// UINT cInputs = LOWORD(wParam);
-			// PTOUCHINPUT pInputs = memnew_arr(TOUCHINPUT, cInputs);
-			// if (pInputs) {
-				// if (GetTouchInputInfo((HTOUCHINPUT)lParam, cInputs, pInputs, sizeof(TOUCHINPUT))) {
-					// for (UINT i = 0; i < cInputs; i++) {
-						// TOUCHINPUT ti = pInputs[i];
-						// POINT touch_pos = {
-							// TOUCH_COORD_TO_PIXEL(ti.x),
-							// TOUCH_COORD_TO_PIXEL(ti.y),
-						// };
-						// ScreenToClient(hWnd, &touch_pos);
-						////do something with each touch input entry
-						// if (ti.dwFlags & TOUCHEVENTF_MOVE) {
-							// _drag_event(touch_pos.x, touch_pos.y, ti.dwID);
-						// } else if (ti.dwFlags & (TOUCHEVENTF_UP | TOUCHEVENTF_DOWN)) {
-							// _touch_event(ti.dwFlags & TOUCHEVENTF_DOWN, touch_pos.x, touch_pos.y, ti.dwID);
-						// };
-					// }
-					// bHandled = TRUE;
-				// } else {
-					// /* handle the error here */
-				// }
-				// memdelete_arr(pInputs);
-			// } else {
-				// /* handle the error here, probably out of memory */
-			// }
-			// if (bHandled) {
-				// CloseTouchInputHandle((HTOUCHINPUT)lParam);
-				// return 0;
-			// };
+		case WM_TOUCH: {
+			BOOL bHandled = FALSE;
+			UINT cInputs = LOWORD(wParam);
+			PTOUCHINPUT pInputs = memnew_arr(TOUCHINPUT, cInputs);
+			if (pInputs) {
+				if (GetTouchInputInfo((HTOUCHINPUT)lParam, cInputs, pInputs, sizeof(TOUCHINPUT))) {
+					for (UINT i = 0; i < cInputs; i++) {
+						TOUCHINPUT ti = pInputs[i];
+						POINT touch_pos = {
+							TOUCH_COORD_TO_PIXEL(ti.x),
+							TOUCH_COORD_TO_PIXEL(ti.y),
+						};
+						ScreenToClient(hWnd, &touch_pos);
+						//do something with each touch input entry
+						if (ti.dwFlags & TOUCHEVENTF_MOVE) {
+							_drag_event(touch_pos.x, touch_pos.y, ti.dwID);
+						} else if (ti.dwFlags & (TOUCHEVENTF_UP | TOUCHEVENTF_DOWN)) {
+							_touch_event(ti.dwFlags & TOUCHEVENTF_DOWN, touch_pos.x, touch_pos.y, ti.dwID);
+						};
+					}
+					bHandled = TRUE;
+				} else {
+					/* handle the error here */
+				}
+				memdelete_arr(pInputs);
+			} else {
+				/* handle the error here, probably out of memory */
+			}
+			if (bHandled) {
+				CloseTouchInputHandle((HTOUCHINPUT)lParam);
+				return 0;
+			};
 
-		// } break;
+		} break;
 
 		case WM_DEVICECHANGE: {
 			joypad->probe_joypads();
@@ -1677,7 +1677,7 @@ Error OS_Windows::initialize(const VideoMode &p_desired, int p_video_driver, int
 	tme.dwHoverTime = HOVER_DEFAULT;
 	TrackMouseEvent(&tme);
 
-	//RegisterTouchWindow(hWnd, 0);
+	RegisterTouchWindow(hWnd, 0);
 
 	DragAcceptFiles(hWnd, true);
 
