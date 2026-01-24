@@ -1575,7 +1575,7 @@ Error OS_Windows::initialize(const VideoMode &p_desired, int p_video_driver, int
 
 #if defined(OPENGL_ENABLED)
 
-	bool gles3_context = true;
+	bool gles3_context = false;
 	if (p_video_driver == VIDEO_DRIVER_GLES2) {
 		gles3_context = false;
 	}
@@ -1606,6 +1606,7 @@ Error OS_Windows::initialize(const VideoMode &p_desired, int p_video_driver, int
 		}
 	}
 
+/*
 	while (true) {
 		if (gles3_context) {
 			if (RasterizerGLES3::is_viable() == OK) {
@@ -1633,6 +1634,14 @@ Error OS_Windows::initialize(const VideoMode &p_desired, int p_video_driver, int
 			}
 		}
 	}
+*/
+	if (RasterizerGLES2::is_viable() == OK) {
+		RasterizerGLES2::register_config();
+		RasterizerGLES2::make_current();
+	} else {
+		gl_initialization_error = true;
+	}
+	
 
 	if (gl_initialization_error) {
 		OS::get_singleton()->alert("Your video card driver does not support any of the supported OpenGL versions.\n"
