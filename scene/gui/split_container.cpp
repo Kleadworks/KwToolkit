@@ -78,7 +78,8 @@ void SplitContainer::_resort() {
 	// Determine the separation between items
 	Ref<Texture> g = get_icon("grabber");
 	int sep = get_constant("separation");
-	sep = (dragger_visibility != DRAGGER_HIDDEN_COLLAPSED) ? MAX(sep, vertical ? g->get_height() : g->get_width()) : 0;
+	//sep = (dragger_visibility != DRAGGER_HIDDEN_COLLAPSED) ? MAX(sep, vertical ? g->get_height() : g->get_width()) : 0;
+	sep = (dragger_visibility != DRAGGER_HIDDEN_COLLAPSED) ? sep : 0;
 
 	// Compute the minimum size
 	Size2 ms_first = first->get_combined_minimum_size();
