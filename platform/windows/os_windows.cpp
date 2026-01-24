@@ -1711,10 +1711,12 @@ Error OS_Windows::initialize(const VideoMode &p_desired, int p_video_driver, int
 		// This is not done for the editor to prevent importers or resource bakers
 		// from making the system unresponsive.
 		SetPriorityClass(GetCurrentProcess(), ABOVE_NORMAL_PRIORITY_CLASS);
+#if _WIN32_WINNT >= 0x0600 // Windows Vista+
 		DWORD index = 0;
 		HANDLE handle = AvSetMmThreadCharacteristics("Games", &index);
 		if (handle)
 			AvSetMmThreadPriority(handle, AVRT_PRIORITY_CRITICAL);
+#endif
 
 		// This is needed to make sure that background work does not starve the main thread.
 		// This is only setting priority of this thread, not the whole process.
@@ -3537,6 +3539,7 @@ void OS_Windows::keyboard_set_current_layout(int p_index) {
 }
 
 String OS_Windows::keyboard_get_layout_language(int p_index) const {
+#if _WIN32_WINNT >= 0x0600 // Windows Vista+
 	int layout_count = GetKeyboardLayoutList(0, NULL);
 
 	ERR_FAIL_INDEX_V(p_index, layout_count, "");
@@ -3551,6 +3554,10 @@ String OS_Windows::keyboard_get_layout_language(int p_index) const {
 	memfree(layouts);
 
 	return String(buf).substr(0, 2);
+#else
+	ERR_PRINT("keyboard_get_layout_language unimplemented when targeting Windows XP!");
+	return "";	// unimplemented
+#endif
 }
 
 uint32_t OS_Windows::keyboard_get_scancode_from_physical(uint32_t p_scancode) const {
@@ -3619,6 +3626,7 @@ String OS_Windows::keyboard_get_layout_name(int p_index) const {
 	GetKeyboardLayoutList(layout_count, layouts);
 
 	String ret = _get_full_layout_name_from_registry(layouts[p_index]); // Try reading full name from Windows registry, fallback to locale name if failed (e.g. on Wine).
+#if _WIN32_WINNT >= 0x0600 // Windows Vista+
 	if (ret == String()) {
 		wchar_t buf[LOCALE_NAME_MAX_LENGTH];
 		memset(buf, 0, LOCALE_NAME_MAX_LENGTH * sizeof(wchar_t));
@@ -3630,6 +3638,7 @@ String OS_Windows::keyboard_get_layout_name(int p_index) const {
 
 		ret = String(name);
 	}
+#endif
 	memfree(layouts);
 
 	return ret;
@@ -3755,6 +3764,7 @@ String OS_Windows::get_godot_dir_name() const {
 }
 
 String OS_Windows::get_system_dir(SystemDir p_dir, bool p_shared_storage) const {
+#if _WIN32_WINNT >= 0x0600 // Windows Vista+
 	KNOWNFOLDERID id;
 
 	switch (p_dir) {
@@ -3789,6 +3799,42 @@ String OS_Windows::get_system_dir(SystemDir p_dir, bool p_shared_storage) const 
 	ERR_FAIL_COND_V(res != S_OK, String());
 	String path = String(szPath).replace("\\", "/");
 	CoTaskMemFree(szPath);
+#else // Windows XP
+	int id;
+
+	switch (p_dir) {
+		case SYSTEM_DIR_DESKTOP: {
+			id = CSIDL_DESKTOPDIRECTORY;
+		} break;
+		case SYSTEM_DIR_DCIM: {
+			id = CSIDL_MYPICTURES;
+		} break;
+		case SYSTEM_DIR_DOCUMENTS: {
+			id = CSIDL_MYDOCUMENTS;
+		} break;
+		case SYSTEM_DIR_DOWNLOADS: {
+			id = CSIDL_MYDOCUMENTS;
+		} break;
+		case SYSTEM_DIR_MOVIES: {
+			id = CSIDL_MYVIDEO;
+		} break;
+		case SYSTEM_DIR_MUSIC: {
+			id = CSIDL_MYMUSIC;
+		} break;
+		case SYSTEM_DIR_PICTURES: {
+			id = CSIDL_MYPICTURES;
+		} break;
+		case SYSTEM_DIR_RINGTONES: {
+			id = CSIDL_MYMUSIC;
+		} break;
+	}
+
+	TCHAR szPath[MAX_PATH];
+	HRESULT res = SHGetFolderPath(NULL, id, NULL, 0, szPath);
+	ERR_FAIL_COND_V(res != S_OK, String());
+	String path = String(szPath).replace("\\", "/");
+	CoTaskMemFree(szPath);
+#endif
 	return path;
 }
 

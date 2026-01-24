@@ -95,9 +95,12 @@ bool ContextGL_Windows::should_vsync_via_compositor() {
 	// It can be disabled on earlier Windows versions.
 	BOOL dwm_enabled;
 
+	// TODO: Dynamically acquire DWM api
+#if _WIN32_WINNT >= 0x0600 // Windows Vista+
 	if (SUCCEEDED(DwmIsCompositionEnabled(&dwm_enabled))) {
 		return dwm_enabled;
 	}
+#endif
 
 	return false;
 }
@@ -109,7 +112,9 @@ void ContextGL_Windows::swap_buffers() {
 		bool vsync_via_compositor_now = should_vsync_via_compositor();
 
 		if (vsync_via_compositor_now && wglGetSwapIntervalEXT() == 0) {
+#if _WIN32_WINNT >= 0x0600 // Windows Vista+
 			DwmFlush();
+#endif
 		}
 
 		if (vsync_via_compositor_now != vsync_via_compositor) {

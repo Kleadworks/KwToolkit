@@ -263,6 +263,10 @@ typedef struct {
 	ICONDIRENTRY idEntries[1]; // An entry for each image (idCount of 'em)
 } ICONDIR, *LPICONDIR;
 
+#ifndef WM_MOUSEHWHEEL
+#define WM_MOUSEHWHEEL                  0x020E
+#endif
+
 class JoypadWindows;
 class OS_Windows : public OS {
 	String tablet_driver;
