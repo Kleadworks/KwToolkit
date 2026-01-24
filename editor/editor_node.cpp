@@ -6173,8 +6173,8 @@ EditorNode::EditorNode() {
 
 	main_vbox = memnew(VBoxContainer);
 	gui_base->add_child(main_vbox);
-	main_vbox->set_anchors_and_margins_preset(Control::PRESET_WIDE, Control::PRESET_MODE_MINSIZE, 8);
-	main_vbox->add_constant_override("separation", 8 * EDSCALE);
+	main_vbox->set_anchors_and_margins_preset(Control::PRESET_WIDE, Control::PRESET_MODE_MINSIZE, 6);
+	main_vbox->add_constant_override("separation", 6 * EDSCALE);
 
 	menu_hb = memnew(HBoxContainer);
 	main_vbox->add_child(menu_hb);
@@ -6349,6 +6349,25 @@ EditorNode::EditorNode() {
 
 	srt->add_child(tabbar_container);
 	tabbar_container->add_child(scene_tabs);
+	
+	// make it so the buttons take up less space...
+	Ref<StyleBoxEmpty> empty_style = memnew(StyleBoxEmpty);
+
+	scene_tab_add = memnew(ToolButton);
+	scene_tab_add->set_tooltip(TTR("Add a new scene."));
+	scene_tab_add->set_icon(gui_base->get_icon("Add", "EditorIcons"));
+	scene_tab_add->add_color_override("icon_color_normal", Color(0.6f, 0.6f, 0.6f, 0.8f));
+	scene_tab_add->connect("pressed", this, "_menu_option", make_binds(FILE_NEW_SCENE));
+	scene_tab_add->add_style_override("normal", empty_style);
+	scene_tab_add->add_style_override("hover", empty_style);
+	scene_tab_add->add_style_override("pressed", empty_style);
+	scene_tab_add->add_style_override("focus", empty_style);
+	tabbar_container->add_child(scene_tab_add);
+	// hiding since it looks kind of ugly with smaller tabs right now. 
+	// you can just double-click the empty space to open a new tab anyway
+	scene_tab_add->hide(); 
+
+
 	distraction_free = memnew(ToolButton);
 #ifdef OSX_ENABLED
 	distraction_free->set_shortcut(ED_SHORTCUT("editor/distraction_free_mode", TTR("Distraction Free Mode"), KEY_MASK_CMD | KEY_MASK_CTRL | KEY_D));
@@ -6358,15 +6377,14 @@ EditorNode::EditorNode() {
 	distraction_free->set_tooltip(TTR("Toggle distraction-free mode."));
 	distraction_free->connect("pressed", this, "_toggle_distraction_free_mode");
 	distraction_free->set_icon(gui_base->get_icon("DistractionFree", "EditorIcons"));
+	distraction_free->add_color_override("icon_color_normal", Color(0.6f, 0.6f, 0.6f, 0.8f));
 	distraction_free->set_toggle_mode(true);
-
-	scene_tab_add = memnew(ToolButton);
-	tabbar_container->add_child(scene_tab_add);
+	distraction_free->add_style_override("normal", empty_style);
+	distraction_free->add_style_override("hover", empty_style);
+	distraction_free->add_style_override("pressed", empty_style);
+	distraction_free->add_style_override("focus", empty_style);
 	tabbar_container->add_child(distraction_free);
-	scene_tab_add->set_tooltip(TTR("Add a new scene."));
-	scene_tab_add->set_icon(gui_base->get_icon("Add", "EditorIcons"));
-	scene_tab_add->add_color_override("icon_color_normal", Color(0.6f, 0.6f, 0.6f, 0.8f));
-	scene_tab_add->connect("pressed", this, "_menu_option", make_binds(FILE_NEW_SCENE));
+	
 
 	scene_root_parent = memnew(PanelContainer);
 	scene_root_parent->set_custom_minimum_size(Size2(0, 80) * EDSCALE);

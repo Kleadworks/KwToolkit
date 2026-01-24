@@ -504,7 +504,7 @@ Ref<Theme> create_editor_theme(const Ref<Theme> p_theme) {
 	// Ensure borders are visible when using an editor scale below 100%.
 	const int border_width = CLAMP(border_size, 0, 3) * MAX(1, EDSCALE);
 
-	const int default_margin_size = 4;
+	const int default_margin_size = 3;
 	const int margin_size_extra = default_margin_size + CLAMP(border_size, 0, 3);
 
 	// styleboxes
@@ -571,8 +571,8 @@ Ref<Theme> create_editor_theme(const Ref<Theme> p_theme) {
 
 	// Tabs
 
-	const int tab_default_margin_side = 10 * EDSCALE + extra_spacing * EDSCALE;
-	const int tab_default_margin_vertical = 5 * EDSCALE + extra_spacing * EDSCALE;
+	const int tab_default_margin_side = 8 * EDSCALE + extra_spacing * EDSCALE;
+	const int tab_default_margin_vertical = 2 * EDSCALE + extra_spacing * EDSCALE;
 
 	Ref<StyleBoxFlat> style_tab_selected = style_widget->duplicate();
 
@@ -582,7 +582,7 @@ Ref<Theme> create_editor_theme(const Ref<Theme> p_theme) {
 	style_tab_selected->set_expand_margin_size(MARGIN_BOTTOM, border_width);
 	style_tab_selected->set_default_margin(MARGIN_LEFT, tab_default_margin_side);
 	style_tab_selected->set_default_margin(MARGIN_RIGHT, tab_default_margin_side);
-	style_tab_selected->set_default_margin(MARGIN_BOTTOM, tab_default_margin_vertical);
+	style_tab_selected->set_default_margin(MARGIN_BOTTOM, 0);
 	style_tab_selected->set_default_margin(MARGIN_TOP, tab_default_margin_vertical);
 	style_tab_selected->set_bg_color(tab_color);
 
@@ -851,12 +851,12 @@ Ref<Theme> create_editor_theme(const Ref<Theme> p_theme) {
 	theme->set_color("guide_color", "Tree", guide_color);
 	theme->set_color("relationship_line_color", "Tree", relationship_line_color);
 	theme->set_color("drop_position_color", "Tree", accent_color);
-	theme->set_constant("vseparation", "Tree", (extra_spacing + default_margin_size) * EDSCALE);
-	theme->set_constant("hseparation", "Tree", (extra_spacing + default_margin_size) * EDSCALE);
-	theme->set_constant("item_margin", "Tree", 3 * default_margin_size * EDSCALE);
-	theme->set_constant("button_margin", "Tree", default_margin_size * EDSCALE);
+	theme->set_constant("vseparation", "Tree", 1 * EDSCALE);
+	theme->set_constant("hseparation", "Tree", 2 * EDSCALE);
+	theme->set_constant("item_margin", "Tree", 12 * EDSCALE);
+	theme->set_constant("button_margin", "Tree", 0);//(default_margin_size * EDSCALE) / 2);
 	theme->set_constant("draw_relationship_lines", "Tree", relationship_line_opacity >= 0.01);
-	theme->set_constant("draw_guides", "Tree", relationship_line_opacity < 0.01);
+	theme->set_constant("draw_guides", "Tree", 0);//relationship_line_opacity < 0.01);
 	theme->set_constant("scroll_border", "Tree", 40 * EDSCALE);
 	theme->set_constant("scroll_speed", "Tree", 12);
 
@@ -919,8 +919,8 @@ Ref<Theme> create_editor_theme(const Ref<Theme> p_theme) {
 	theme->set_color("font_color", "ItemList", font_color);
 	theme->set_color("font_color_selected", "ItemList", mono_color);
 	theme->set_color("guide_color", "ItemList", guide_color);
-	theme->set_constant("vseparation", "ItemList", 3 * EDSCALE);
-	theme->set_constant("hseparation", "ItemList", 3 * EDSCALE);
+	theme->set_constant("vseparation", "ItemList", 1 * EDSCALE);
+	theme->set_constant("hseparation", "ItemList", 2 * EDSCALE);
 	theme->set_constant("icon_margin", "ItemList", default_margin_size * EDSCALE);
 	theme->set_constant("line_separation", "ItemList", 3 * EDSCALE);
 
@@ -1064,15 +1064,15 @@ Ref<Theme> create_editor_theme(const Ref<Theme> p_theme) {
 	// WindowDialog
 	Ref<StyleBoxFlat> style_window = style_popup->duplicate();
 	style_window->set_border_color(tab_color);
-	style_window->set_border_width(MARGIN_TOP, 24 * EDSCALE);
-	style_window->set_expand_margin_size(MARGIN_TOP, 24 * EDSCALE);
+	style_window->set_border_width(MARGIN_TOP, 20 * EDSCALE);
+	style_window->set_expand_margin_size(MARGIN_TOP, 20 * EDSCALE);
 	theme->set_stylebox("panel", "WindowDialog", style_window);
 	theme->set_color("title_color", "WindowDialog", font_color);
 	theme->set_icon("close", "WindowDialog", theme->get_icon("GuiClose", "EditorIcons"));
 	theme->set_icon("close_highlight", "WindowDialog", theme->get_icon("GuiClose", "EditorIcons"));
 	theme->set_constant("close_h_ofs", "WindowDialog", 22 * EDSCALE);
-	theme->set_constant("close_v_ofs", "WindowDialog", 20 * EDSCALE);
-	theme->set_constant("title_height", "WindowDialog", 24 * EDSCALE);
+	theme->set_constant("close_v_ofs", "WindowDialog", 18 * EDSCALE);
+	theme->set_constant("title_height", "WindowDialog", 20 * EDSCALE);
 	theme->set_font("title_font", "WindowDialog", theme->get_font("title", "EditorFonts"));
 
 	// complex window, for now only Editor settings and Project settings
