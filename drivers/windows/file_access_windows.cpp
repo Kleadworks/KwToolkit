@@ -159,7 +159,7 @@ void FileAccessWindows::close() {
 				rename_error = _wrename((save_path + ".tmp").c_str(), save_path.c_str()) != 0;
 			} else {
 				//atomic replace for existing file
-				rename_error = !ReplaceFileW(save_path.c_str(), (save_path + ".tmp").c_str(), NULL, 2 | 4, NULL, NULL);
+				rename_error = !ReplaceFileW(save_path.c_str(), (save_path + L".tmp").c_str(), NULL, REPLACEFILE_WRITE_THROUGH | REPLACEFILE_IGNORE_MERGE_ERRORS, NULL, NULL);
 			}
 			if (rename_error) {
 				attempts--;
