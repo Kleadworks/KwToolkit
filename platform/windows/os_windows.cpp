@@ -3829,8 +3829,8 @@ String OS_Windows::get_system_dir(SystemDir p_dir, bool p_shared_storage) const 
 		} break;
 	}
 
-	TCHAR szPath[MAX_PATH];
-	HRESULT res = SHGetFolderPath(NULL, id, NULL, 0, szPath);
+	wchar_t szPath[MAX_PATH];
+	HRESULT res = SHGetFolderPathW(NULL, id, NULL, 0, szPath);
 	ERR_FAIL_COND_V(res != S_OK, String());
 	String path = String(szPath).replace("\\", "/");
 	CoTaskMemFree(szPath);
