@@ -1515,11 +1515,11 @@ float EditorSettings::get_auto_display_scale() const {
 		// Likely a hiDPI display, but we aren't certain due to the returned DPI.
 		// Use an intermediate scale to handle this situation.
 		return 1.5;
-	} else if (smallest_dimension <= 800) {
+	/*} else if (smallest_dimension <= 800) {
 		// Small loDPI display. Use a smaller display scale so that editor elements fit more easily.
 		// Icons won't look great, but this is better than having editor elements overflow from its window.
 		return 0.75;
-	}
+	}*/
 	return 1.0;
 #endif
 }
