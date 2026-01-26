@@ -197,9 +197,9 @@ def configure_msvc(env, manual_msvc_config):
         env.Append(LINKFLAGS=["/DEBUG"])
 
     if env["windows_subsystem"] == "gui":
-        env.Append(LINKFLAGS=["/SUBSYSTEM:WINDOWS"])
+        env.Append(LINKFLAGS=["/SUBSYSTEM:WINDOWS,5.01"])
     else:
-        env.Append(LINKFLAGS=["/SUBSYSTEM:CONSOLE"])
+        env.Append(LINKFLAGS=["/SUBSYSTEM:CONSOLE,5.01"])
         env.AppendUnique(CPPDEFINES=["WINDOWS_SUBSYSTEM_CONSOLE"])
 
     env.Append(LINKFLAGS=["/ENTRY:mainCRTStartup"])
