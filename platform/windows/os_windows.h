@@ -51,7 +51,6 @@
 #endif
 #include "tts_windows.h"
 
-#include <dwmapi.h>
 #include <fcntl.h>
 #include <io.h>
 #include <shellapi.h>
@@ -263,9 +262,27 @@ typedef struct {
 	ICONDIRENTRY idEntries[1]; // An entry for each image (idCount of 'em)
 } ICONDIR, *LPICONDIR;
 
+// NT6+
 #ifndef WM_MOUSEHWHEEL
 #define WM_MOUSEHWHEEL                  0x020E
 #endif
+
+// DWM API
+#define DWM_BB_ENABLE					0x00000001
+#define DWM_BB_BLURREGION				0x00000002
+#define DWM_BB_TRANSITIONONMAXIMIZED	0x00000004
+
+typedef struct _DWM_BLURBEHIND
+{
+    DWORD dwFlags;
+    BOOL fEnable;
+    HRGN hRgnBlur;
+    BOOL fTransitionOnMaximized;
+} DWM_BLURBEHIND, *PDWM_BLURBEHIND;
+
+typedef HRESULT(WINAPI *DwmIsCompositionEnabledPtr)(BOOL *pfEnabled);
+typedef HRESULT(WINAPI *DwmFlushPtr)();
+typedef HRESULT(WINAPI *DwmEnableBlurBehindWindowPtr)(HWND hwnd, const DWM_BLURBEHIND *pBlurBehind);
 
 class JoypadWindows;
 class OS_Windows : public OS {
@@ -285,6 +302,14 @@ class OS_Windows : public OS {
 	static GetPointerTypePtr win8p_GetPointerType;
 	static GetPointerPenInfoPtr win8p_GetPointerPenInfo;
 
+	// Windows DWM API
+public:
+	static bool dwm_available;
+	static DwmIsCompositionEnabledPtr dwm_DwmIsCompositionEnabled;
+	static DwmFlushPtr dwm_DwmFlush;
+	static DwmEnableBlurBehindWindowPtr dwm_DwmEnableBlurBehindWindow;
+
+private:
 	HANDLE wtctx;
 	LOGCONTEXTW wtlc;
 	int min_pressure;

@@ -33,8 +33,7 @@
 // Author: Juan Linietsky <reduzio@gmail.com>, (C) 2008
 
 #include "context_gl_windows.h"
-
-#include <dwmapi.h>
+#include "os_windows.h" // this gets dwmapi now
 
 #define WGL_CONTEXT_MAJOR_VERSION_ARB 0x2091
 #define WGL_CONTEXT_MINOR_VERSION_ARB 0x2092
@@ -90,17 +89,14 @@ bool ContextGL_Windows::should_vsync_via_compositor() {
 	if (OS::get_singleton()->is_window_fullscreen() || !OS::get_singleton()->is_vsync_via_compositor_enabled()) {
 		return false;
 	}
+	
+	if (OS_Windows::dwm_available) {
+		BOOL dwm_enabled;
 
-	// TODO: Dynamically acquire DWM api
-#if _WIN32_WINNT >= 0x0600 // Windows Vista+
-	// Note: All Windows versions supported by Godot have a compositor.
-	// It can be disabled on earlier Windows versions.
-	BOOL dwm_enabled;
-
-	if (SUCCEEDED(DwmIsCompositionEnabled(&dwm_enabled))) {
-		return dwm_enabled;
+		if (SUCCEEDED(OS_Windows::dwm_DwmIsCompositionEnabled(&dwm_enabled))) {
+			return dwm_enabled;
+		}
 	}
-#endif
 
 	return false;
 }
@@ -112,9 +108,7 @@ void ContextGL_Windows::swap_buffers() {
 		bool vsync_via_compositor_now = should_vsync_via_compositor();
 
 		if (vsync_via_compositor_now && wglGetSwapIntervalEXT() == 0) {
-#if _WIN32_WINNT >= 0x0600 // Windows Vista+
-			DwmFlush();
-#endif
+			OS_Windows::dwm_DwmFlush();
 		}
 
 		if (vsync_via_compositor_now != vsync_via_compositor) {

@@ -175,6 +175,12 @@ bool OS_Windows::winink_available = false;
 GetPointerTypePtr OS_Windows::win8p_GetPointerType = NULL;
 GetPointerPenInfoPtr OS_Windows::win8p_GetPointerPenInfo = NULL;
 
+// DWM API
+bool OS_Windows::dwm_available = NULL;
+DwmIsCompositionEnabledPtr OS_Windows::dwm_DwmIsCompositionEnabled = NULL;
+DwmFlushPtr OS_Windows::dwm_DwmFlush = NULL;
+DwmEnableBlurBehindWindowPtr OS_Windows::dwm_DwmEnableBlurBehindWindow = NULL;
+
 void OS_Windows::initialize_debugging() {
 	SetConsoleCtrlHandler(HandlerRoutine, TRUE);
 }
@@ -2411,7 +2417,10 @@ bool OS_Windows::get_window_per_pixel_transparency_enabled() const {
 void OS_Windows::set_window_per_pixel_transparency_enabled(bool p_enabled) {
 	if (!is_layered_allowed())
 		return;
-#if _WIN32_WINNT >= 0x0600 // Windows Vista+
+	
+	if (!dwm_available)
+		return;
+	
 	if (layered_window != p_enabled) {
 		if (p_enabled) {
 			//enable per-pixel alpha
@@ -2421,7 +2430,7 @@ void OS_Windows::set_window_per_pixel_transparency_enabled(bool p_enabled) {
 			bb.dwFlags = DWM_BB_ENABLE | DWM_BB_BLURREGION;
 			bb.hRgnBlur = hRgn;
 			bb.fEnable = TRUE;
-			DwmEnableBlurBehindWindow(hWnd, &bb);
+			dwm_DwmEnableBlurBehindWindow(hWnd, &bb);
 
 			layered_window = true;
 		} else {
@@ -2433,10 +2442,9 @@ void OS_Windows::set_window_per_pixel_transparency_enabled(bool p_enabled) {
 			bb.dwFlags = DWM_BB_ENABLE | DWM_BB_BLURREGION;
 			bb.hRgnBlur = hRgn;
 			bb.fEnable = FALSE;
-			DwmEnableBlurBehindWindow(hWnd, &bb);
+			dwm_DwmEnableBlurBehindWindow(hWnd, &bb);
 		}
 	}
-#endif
 }
 
 void OS_Windows::set_borderless_window(bool p_borderless) {
@@ -4074,6 +4082,15 @@ OS_Windows::OS_Windows(HINSTANCE _hInstance) {
 
 	if (winink_available) {
 		tablet_drivers.push_back("winink");
+	}
+	
+	HMODULE dwmapi_lib = LoadLibraryW(L"dwmapi.dll");
+	if (dwmapi_lib) {
+		dwm_DwmIsCompositionEnabled = (DwmIsCompositionEnabledPtr)GetProcAddress(dwmapi_lib, "DwmIsCompositionEnabled");
+		dwm_DwmFlush = (DwmFlushPtr)GetProcAddress(dwmapi_lib, "DwmFlush");
+		dwm_DwmEnableBlurBehindWindow = (DwmEnableBlurBehindWindowPtr)GetProcAddress(dwmapi_lib, "DwmEnableBlurBehindWindow");
+		
+		dwm_available = dwm_DwmIsCompositionEnabled && dwm_DwmFlush && dwm_DwmEnableBlurBehindWindow;
 	}
 
 	hInstance = _hInstance;
