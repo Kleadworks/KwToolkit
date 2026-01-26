@@ -1,13 +1,9 @@
 #if _WIN32_WINNT < 0x0600
-#include <string.h>
-#include <stdio.h>
 #define WIN32_LEAN_AND_MEAN
 #define _WINSOCK_DEPRECATED_NO_WARNINGS // WSAAddressToStringA
 #include <windows.h>
 #include <winsock2.h>
 #include <ws2tcpip.h>
-#include <iphlpapi.h>
-#include <bcrypt.h>
 #include <ntsecapi.h>
 
 // reimplementations of functions that mbedtls needs which don't appear to exist in XP.
