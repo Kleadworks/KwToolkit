@@ -1,3 +1,16 @@
+# KwToolkit
+
+<p align="center">
+  <img src="kwtoolkit_logo.png" width="400" alt="KwToolkit logo">
+</p>
+
+This is a fork of Godot 3.7 focused for my niche interests, such as Windows XP/Vista support & lower spec rendering.
+It also features a more condensed default visual style than Godot 3.
+As such, it may have breaking changes, so it's been rebranded to make it more obvious.
+It's still Godot at its core though! :)
+
+The original readme for the Godot Engine is below.
+
 # Godot Engine
 
 <p align="center">

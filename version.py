@@ -1,10 +1,10 @@
-short_name = "godot"
-name = "Godot Engine"
+short_name = "kwtk"
+name = "KwToolkit"
 major = 3
 minor = 7
 patch = 0
 status = "dev"
 module_config = ""
-year = 2024
-website = "https://godotengine.org"
+year = 2026
+website = "https://github.com/Kleadworks"
 docs = "3.6"
