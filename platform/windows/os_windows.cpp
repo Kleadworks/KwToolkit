@@ -3823,7 +3823,7 @@ String OS_Windows::get_system_dir(SystemDir p_dir, bool p_shared_storage) const 
 			id = CSIDL_MYDOCUMENTS;
 		} break;
 		case SYSTEM_DIR_DOWNLOADS: {
-			id = CSIDL_MYDOCUMENTS;
+			id = CSIDL_MYDOCUMENTS; // NOTE: no direct replacement
 		} break;
 		case SYSTEM_DIR_MOVIES: {
 			id = CSIDL_MYVIDEO;
