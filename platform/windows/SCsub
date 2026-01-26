@@ -16,6 +16,7 @@ common_win = [
     "tts_windows.cpp",
     "power_windows.cpp",
     "windows_terminal_logger.cpp",
+    "xp_fixes.cpp"
 ]
 
 res_file = "godot_res.rc"
