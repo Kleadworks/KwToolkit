@@ -6707,8 +6707,9 @@ EditorNode::EditorNode() {
 	p->add_icon_shortcut(gui_base->get_icon("ExternalLink", "EditorIcons"), ED_SHORTCUT("editor/suggest_a_feature", TTR("Suggest a Feature")), HELP_SUGGEST_A_FEATURE);
 	p->add_icon_shortcut(gui_base->get_icon("ExternalLink", "EditorIcons"), ED_SHORTCUT("editor/send_docs_feedback", TTR("Send Docs Feedback")), HELP_SEND_DOCS_FEEDBACK);
 	p->add_separator();
-	p->add_icon_shortcut(gui_base->get_icon("Godot", "EditorIcons"), ED_SHORTCUT("editor/about", TTR("About Godot")), HELP_ABOUT);
-	p->add_icon_shortcut(gui_base->get_icon("Heart", "EditorIcons"), ED_SHORTCUT("editor/support_development", TTR("Support Godot Development")), HELP_SUPPORT_GODOT_DEVELOPMENT);
+	//p->add_icon_shortcut(gui_base->get_icon("Godot", "EditorIcons"), ED_SHORTCUT("editor/about", TTR("About Godot")), HELP_ABOUT);
+	//p->add_icon_shortcut(gui_base->get_icon("Heart", "EditorIcons"), ED_SHORTCUT("editor/support_development", TTR("Support Godot Development")), HELP_SUPPORT_GODOT_DEVELOPMENT);
+	p->add_icon_shortcut(gui_base->get_icon("InformationSign", "EditorIcons"), ED_SHORTCUT("editor/about", TTR("About KwToolkit")), HELP_ABOUT);
 
 	HBoxContainer *play_hb = memnew(HBoxContainer);
 	menu_hb->add_child(play_hb);

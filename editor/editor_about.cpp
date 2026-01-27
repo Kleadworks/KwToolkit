@@ -49,6 +49,7 @@ void EditorAbout::_notification(int p_what) {
 			_license_text->add_font_override("normal_font", font);
 			_license_text->add_constant_override("line_separation", 6 * EDSCALE);
 			_logo->set_texture(get_icon("Logo", "EditorIcons"));
+			_logo_godot->set_texture(get_icon("LogoGodot", "EditorIcons"));
 		} break;
 	}
 }
@@ -111,7 +112,7 @@ ScrollContainer *EditorAbout::_populate_list(const String &p_name, const List<St
 }
 
 EditorAbout::EditorAbout() {
-	set_title(TTR("Thanks from the Godot community!"));
+	set_title(TTR("About KwToolkit"));
 	set_hide_on_ok(true);
 	set_resizable(true);
 
@@ -125,6 +126,9 @@ EditorAbout::EditorAbout() {
 
 	_logo = memnew(TextureRect);
 	hbc->add_child(_logo);
+	
+	_logo_godot = memnew(TextureRect);
+	hbc->add_child(_logo_godot);
 
 	VBoxContainer *version_info_vbc = memnew(VBoxContainer);
 
@@ -148,7 +152,8 @@ EditorAbout::EditorAbout() {
 	Label *about_text = memnew(Label);
 	about_text->set_v_size_flags(Control::SIZE_SHRINK_CENTER);
 	about_text->set_text(
-			String::utf8("\xc2\xa9 2014-present ") + TTR("Godot Engine contributors") + "." +
+			String::utf8("\xc2\xa9 2026-present Kleadworks.") +
+			String::utf8("\n\xc2\xa9 2014-present ") + TTR("Godot Engine contributors") + "." +
 			String::utf8("\n\xc2\xa9 2007-2014 Juan Linietsky, Ariel Manzur.\n"));
 	version_info_vbc->add_child(about_text);
 
@@ -159,7 +164,21 @@ EditorAbout::EditorAbout() {
 	tc->set_v_size_flags(Control::SIZE_EXPAND_FILL);
 	vbc->add_child(tc);
 
-	// Authors
+	// Authors (KwToolkit)
+
+	const char *const AUTHORS_KLEADWORKS_LEAD[] = {
+		"Aidan Hewitt (Kleadron)",
+		0
+	};
+
+	List<String> dev_sections2;
+	dev_sections2.push_back(TTR("Kleadworks Lead Developer"));
+	const char *const *dev_src2[] = {
+		AUTHORS_KLEADWORKS_LEAD,
+	};
+	tc->add_child(_populate_list("KwToolkit Authors", dev_sections2, dev_src2, 1));
+
+	// Authors (Godot)
 
 	List<String> dev_sections;
 	dev_sections.push_back(TTR("Project Founders"));
@@ -173,10 +192,11 @@ EditorAbout::EditorAbout() {
 		AUTHORS_PROJECT_MANAGERS,
 		AUTHORS_DEVELOPERS,
 	};
-	tc->add_child(_populate_list(TTR("Authors"), dev_sections, dev_src, 1));
+	tc->add_child(_populate_list("Godot Authors", dev_sections, dev_src, 1));
 
 	// Donors
-
+	
+	/*
 	List<String> donor_sections;
 	donor_sections.push_back(TTR("Patrons"));
 	donor_sections.push_back(TTR("Platinum Sponsors"));
@@ -197,7 +217,8 @@ EditorAbout::EditorAbout() {
 		DONORS_MEMBERS_GOLD,
 	};
 	tc->add_child(_populate_list(TTR("Donors"), donor_sections, donor_src, 3));
-
+	*/
+	
 	// License
 
 	_license_text = memnew(RichTextLabel);

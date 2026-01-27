@@ -63,6 +63,7 @@ private:
 	RichTextLabel *_license_text;
 	RichTextLabel *_tpl_text;
 	TextureRect *_logo;
+	TextureRect *_logo_godot;
 
 protected:
 	void _notification(int p_what);
