@@ -63,7 +63,8 @@ def get_opts():
         # Targeted Windows version: 7 (and later), minimum supported version
         # XP support dropped after EOL due to missing API for IPv6 and other issues
         # Vista support dropped after EOL due to GH-10243
-        ("target_win_version", "Targeted Windows version, >= 0x0601 (Windows 7)", "0x0601"),
+        # XP/Vista support restored 2026 for KwToolkit, primarily for legacy computing enthusiasts.
+        ("target_win_version", "Targeted Windows version, >= 0x0501 (Windows XP)", "0x0501"),
         BoolVariable("debug_symbols", "Add debugging symbols to release/release_debug builds", True),
         EnumVariable("windows_subsystem", "Windows subsystem", "gui", ("gui", "console")),
         BoolVariable("separate_debug_symbols", "Create a separate file containing debugging symbols", False),
